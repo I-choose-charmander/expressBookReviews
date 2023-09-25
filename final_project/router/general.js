@@ -101,7 +101,7 @@ function getBookList(){
               authors.push(book);
             }
           }
-          resolve(output);  
+          resolve(authors);  
         });
     } 
 
