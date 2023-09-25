@@ -65,4 +65,72 @@ public_users.get('/review/:isbn',function (req, res) {
     res.send(books[isbn].reviews)
 });
 
+function getBookList(){
+    return new Promise((resolve,reject)=>{
+      resolve(books);
+    })
+  }
+  
+  // Get the book list available in the shop
+  public_users.get('/',function (req, res) {
+    getBookList().then(
+      (bk)=>res.send(JSON.stringify(bk, null, 4)),
+      (error) => res.send("denied")
+    );  
+  });
+
+  function getBookIsbn(isbn){
+    return new Promise((resolve,reject)=>{
+        resolve(books[isbn]);
+    });
+  }
+  public_users.get('/isbn/:isbn',function (req, res) {
+    const isbn = req.params.isbn;
+    getBookIsbn(isbn).then(
+        (bk)=>res.send(JSON.stringify(bk, null, 4)),
+        (error) => res.send("denied")
+    );  
+  });
+
+  function getBookAuthor(author){
+    let authors = []
+    return new Promise((resolve,reject)=>{
+          for (var isbn in books) {
+            let book = books[isbn];
+            if (book.author === author){
+              authors.push(book);
+            }
+          }
+          resolve(output);  
+        });
+    } 
+
+  public_users.get('/author/:author',function (req, res) {
+    const authors = req.params.author;
+    getBookAuthor(authors).then(
+        (bk)=>res.send(JSON.stringify(bk, null, 4)),
+        (error) => res.send("denied")
+    );
+  });
+
+  function getBookTitle(title){
+    let titles = []
+    return new Promise((resolve,reject)=>{
+          for (var isbn in books) {
+            let book = books[isbn];
+            if (book.title === title){
+              tiltes.push(book);
+            }
+          }
+          resolve(titles);  
+        });
+    }
+    public_users.get('/title/:title',function (req, res) {
+        const titles = req.params.title;
+        getBookAuthor(titles).then(
+            (bk)=>res.send(JSON.stringify(bk, null, 4)),
+            (error) => res.send("denied")
+        );
+      });
+
 module.exports.general = public_users;
